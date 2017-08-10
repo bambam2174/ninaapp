@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_7fd3ea76cc401c4665c1501cc87788e0a90ca1e6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/sedat/.android/build-cache/03e961836b44a3b6e93312fe1c603735a2a0a65c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="70ffe00aaf049893f59d1dad57bd82992faa38ef">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_a1963ab36483da86f8408104e18a151d8268f8e3/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/sedat/.android/build-cache/02b2ff5ab2fafb5bb731f3dca713755b1345144c/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="364364bf77b4a71afc5930fc3ae57b3f0eea637c">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_0f7b2316c3880728a5ea6413b870e3e0a7a27fca/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/sedat/.android/build-cache/347f1c34fa11ecd680b40ad3aea136a57337c2ac/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="fcae52a60bc07924d370b4d376116cd8f8581f54">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_8f73105889f1fe50e28974644eb2eb037392ba7b/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="76fe5920bf913c15e633721137913ffd0a51776b">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_10a2ce0c34cb60a49af31a9e2f3c98f7788f8a63/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/sedat/.android/build-cache/31df8675b3b1492acd356b317a00639135cc34bb/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="26.0.1"
+        sha1="2430e711762a749feb00b3d64858ca4768251b9d">
+        <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_e6759392801a4bff21c746de38a9e76107253ad6/classes.dex" />
+    </item>
+
+</items>

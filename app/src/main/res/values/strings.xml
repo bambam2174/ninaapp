@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NinaApp</string>
+    <string name="sz_edit_message">Enter a message</string>
+    <string name="sz_button_text">Send</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="sz_open_map">Open Map</string>
+</resources>
