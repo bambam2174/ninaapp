@@ -21,29 +21,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private LocationManager mLocationManager;
     private static long LOCATION_REFRESH_TIME = 5000;
     private static float LOCATION_REFRESH_DISTANCE = 10;
+    private Location mLocation;
 
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Log.d("Location", location.toString());
+            mLocation = location;
             LatLng currLatLong = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.addMarker(new MarkerOptions().position(currLatLong).title("You are here"));
+            mMap.addMarker(new MarkerOptions().position(currLatLong).title("You are here alt:" + location.getAltitude()));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currLatLong));
         }
 
         @Override
         public void onStatusChanged(String s, int i, Bundle bundle) {
-
+            Log.d("onStatusChanged "+i, s);
+            Log.d("Location ", mLocation.toString());
         }
 
         @Override
         public void onProviderEnabled(String s) {
-
+            Log.d("onProviderEnabled ", s);
+            Log.d("Location ", mLocation.toString());
         }
 
         @Override
         public void onProviderDisabled(String s) {
-
+            Log.d("onProviderDisabled ", s);
+            Log.d("Location ", mLocation.toString());
         }
     };
 

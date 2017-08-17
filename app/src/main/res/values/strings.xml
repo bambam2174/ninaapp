@@ -4,4 +4,8 @@
     <string name="sz_button_text">Send</string>
     <string name="title_activity_maps">Map</string>
     <string name="sz_open_map">Open Map</string>
+    <string name="title_activity_maps2">Map</string>
+    <string name="title_activity_map_content">MapContentActivity</string>
+    <string name="title_activity_try_frag">TryFragActivity</string>
+    <string name="action_settings">Settings</string>
 </resources>
