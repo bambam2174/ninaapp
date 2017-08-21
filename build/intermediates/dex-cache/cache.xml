@@ -43,7 +43,7 @@
         jumboMode="true"
         optimize="true"
         revision="26.0.1"
-        sha1="08b408040e9f06b6ca17b21ceff29e55aebbabb0">
+        sha1="02b31eb85a66563b86967128ab6144172cba91c4">
         <dex dex="/home/sedat/AndroidStudioProjects/NinaApp/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_10a2ce0c34cb60a49af31a9e2f3c98f7788f8a63/classes.dex" />
     </item>
     <item

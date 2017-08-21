@@ -1,12 +1,15 @@
 package de.sedatkilinc.ninaapp;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -60,7 +63,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        if (true) {
+
+        this.getLocation();
+    }
+
+    private void getLocation() {
+        if (this.checkLocationPermission()) {
             mLocationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
         }
@@ -68,7 +76,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             String[] perms = { Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS, Manifest.permission.LOCATION_HARDWARE };
             requestPermissions( perms, 1340);
         }
+    }
 
+    private boolean checkLocationPermission() {
+        Log.d("ACCESS_FINE_LOCATION", String.valueOf(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)));
+        Log.d("ACCESS_COARSE_LOCATION", String.valueOf(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)));
+        Log.d("ACCESS_LOCATION_EXTRA_COMMANDS", String.valueOf(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS)));
+        Log.d("LOCATION_HARDWARE", String.valueOf(ContextCompat.checkSelfPermission(this, Manifest.permission.LOCATION_HARDWARE)));
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS) == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -87,7 +108,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Location lastLocation = new Location("");
+        lastLocation.setLatitude(sydney.latitude);
+        lastLocation.setLongitude(sydney.longitude);
+        if (checkLocationPermission()) {
+            lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        LatLng currLatLong = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
+        mMap.addMarker(new MarkerOptions().position(currLatLong).title("Marker last location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(currLatLong));
+    }
+
+    public void geoLocate(View view) {
+        Log.d("geoLocate", view.toString());
+        this.getLocation();
     }
 }

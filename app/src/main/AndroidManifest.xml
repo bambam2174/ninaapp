@@ -44,10 +44,6 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".MapContentActivity"
-            android:label="@string/title_activity_map_content"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".TryFragActivity"
             android:label="@string/title_activity_try_frag"
             android:theme="@style/AppTheme.NoActionBar"></activity>
