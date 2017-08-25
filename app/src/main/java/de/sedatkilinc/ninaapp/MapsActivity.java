@@ -1,7 +1,9 @@
 package de.sedatkilinc.ninaapp;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,8 +17,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -33,7 +39,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mLocation = location;
             LatLng currLatLong = new LatLng(location.getLatitude(), location.getLongitude());
             mMap.addMarker(new MarkerOptions().position(currLatLong).title("You are here alt:" + location.getAltitude()));
-            mMap.moveCamera(CameraUpdateFactory.newLatLng(currLatLong));
+//            mMap.moveCamera(CameraUpdateFactory.newLatLng(currLatLong));
+//            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currLatLong, 13));
+            MapsActivity.this.animateMaptoLatLng(currLatLong);
+            //mMap.zoo
         }
 
         @Override
@@ -64,12 +73,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        this.getLocation();
+        mLocationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
     }
 
     private void getLocation() {
         if (this.checkLocationPermission()) {
-            mLocationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
             mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, LOCATION_REFRESH_TIME, LOCATION_REFRESH_DISTANCE, mLocationListener);
         }
         else {
@@ -112,15 +120,50 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         lastLocation.setLatitude(sydney.latitude);
         lastLocation.setLongitude(sydney.longitude);
         if (checkLocationPermission()) {
-            lastLocation = mLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            lastLocation = mLocationManager.getLastKnownLocation(mLocationManager.getBestProvider(new Criteria(), false));
         }
         LatLng currLatLong = new LatLng(lastLocation.getLatitude(), lastLocation.getLongitude());
         mMap.addMarker(new MarkerOptions().position(currLatLong).title("Marker last location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(currLatLong));
+
+        this.animateMaptoLatLng(currLatLong);
+
+    }
+
+    private void animateMaptoLatLng(LatLng latLng) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+        CameraPosition.Builder cameraPositionBuilder = new CameraPosition.Builder();
+        CameraPosition cameraPosition = cameraPositionBuilder
+                .target(latLng)
+                .zoom(17)
+                .bearing(90)
+                .tilt(40)
+                .build();
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
     }
 
     public void geoLocate(View view) {
         Log.d("geoLocate", view.toString());
         this.getLocation();
+    }
+
+    public void getLocation(View view) {
+        Log.d("getLocation", view.toString());
+        RequestService requestService = new RequestService(this);
+        String szResponse = requestService.getResponse("http://istanbulchicks.hol.es?controller=gps&action=getgpsbyid&aa=1&json=1");
+        Log.d("getLocation", szResponse);
+        JSONObject objJSON = null;
+        JSONArray arrJSON = null;
+        try {
+            //objJSON = new JSONObject(szResponse);
+            arrJSON = new JSONArray(szResponse);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            e.getMessage();
+        }
+//        if (objJSON != null)
+//            arrJSON = objJSON.getJSONArray();
+        Log.d("array json", arrJSON.toString());
+
     }
 }
