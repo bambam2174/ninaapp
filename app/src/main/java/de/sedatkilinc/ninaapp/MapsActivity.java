@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -152,6 +153,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String szResponse = requestService.getResponse("http://istanbulchicks.hol.es?controller=gps&action=getgpsbyid&aa=1&json=1");
         Log.d("getLocation", szResponse);
         JSONObject objJSON = null;
+
         JSONArray arrJSON = null;
         try {
             //objJSON = new JSONObject(szResponse);
@@ -164,6 +166,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //        if (objJSON != null)
 //            arrJSON = objJSON.getJSONArray();
         Log.d("array json", arrJSON.toString());
+        try {
+            for (int i=0; i < arrJSON.length(); i++) {
+
+                JSONObject currObj = arrJSON.getJSONObject(i);
+
+                LatLng currLatLong = new LatLng(currObj.getDouble("lat"), currObj.getDouble("long"));
+                mMap.addMarker(new MarkerOptions().position(currLatLong).title("Bullen"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 }

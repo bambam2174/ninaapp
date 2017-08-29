@@ -4,11 +4,13 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.InputStream;
@@ -22,6 +24,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -31,9 +34,10 @@ import static android.support.v4.content.ContextCompat.checkSelfPermission;
  * Created by sedat on 8/21/17.
  */
 
-public class RequestService {
+public class RequestService extends AsyncTask<String, Void, String> {
 
     private Activity mActivity;
+    URL url;
 
     public RequestService(Activity currentActivity) {
         mActivity = currentActivity;
@@ -105,15 +109,33 @@ public class RequestService {
     }
 
     public String getResponse(String pURL) {
-        HttpURLConnection connection = null;
-        URL url;
-        String szResponse = "";
+        String result = null;
         try {
             url = new URL(pURL);
-            connection = (HttpURLConnection)url.openConnection();
+            result = this.execute(pURL).get();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            e.getMessage();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
-            InputStream in = connection.getInputStream();
+    @Override
+    protected String doInBackground(String... strings) {
+        Log.d("pURL", strings.toString());
+        HttpURLConnection connection = null;
+        String szResponse = "";
+        try {
+            connection = (HttpURLConnection)this.url.openConnection();
 
+            //InputStream in = connection.getInputStream();
+            InputStream in = new BufferedInputStream(connection.getInputStream());
+            //readStream(in);
+            Log.d("inputstream", in.toString());
             InputStreamReader isr = new InputStreamReader(in);
 
             int data = isr.read();
