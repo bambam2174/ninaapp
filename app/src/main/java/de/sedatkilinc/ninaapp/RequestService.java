@@ -48,7 +48,7 @@ public class RequestService extends AsyncTask<String, Void, String> {
         return ContextCompat.checkSelfPermission(mActivity, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED;
     }
 
-    public String  performPostCall(String requestURL, HashMap<String, String> postDataParams) {
+    public String  performPostCallx(String requestURL, HashMap<String, String> postDataParams) {
 
         URL url;
         String response = "";
@@ -124,28 +124,49 @@ public class RequestService extends AsyncTask<String, Void, String> {
         return result;
     }
 
+    public void postLocation(String pURL, Integer uid, Integer gid, Double lat, Double lng) {
+        try {
+            url = new URL(pURL);
+            String[] arrParam = {pURL, uid.toString(), gid.toString(), lat.toString(), lng.toString()};
+            this.execute(arrParam).get();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            e.getMessage();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected String doInBackground(String... strings) {
         Log.d("pURL", strings.toString());
+
         HttpURLConnection connection = null;
         String szResponse = "";
         try {
             connection = (HttpURLConnection)this.url.openConnection();
 
-            //InputStream in = connection.getInputStream();
-            InputStream in = new BufferedInputStream(connection.getInputStream());
-            //readStream(in);
-            Log.d("inputstream", in.toString());
-            InputStreamReader isr = new InputStreamReader(in);
+            if (strings.length > 1) {
+                szResponse = this.performPostCall(strings[0], strings[1], strings[2], strings[3], strings[4]);
+            } else {
+                InputStream in = new BufferedInputStream(connection.getInputStream());
+                //readStream(in);
+                Log.d("inputstream", in.toString());
+                InputStreamReader isr = new InputStreamReader(in);
 
-            int data = isr.read();
-            while (data != -1) {
-                char current = (char) data;
-                data = isr.read();
-                szResponse += current;
-                Log.d("char", String.valueOf(current));
+                int data = isr.read();
+                while (data != -1) {
+                    char current = (char) data;
+                    data = isr.read();
+                    szResponse += current;
+                    Log.d("char", String.valueOf(current));
+                }
+                Log.d("Response", szResponse);
             }
-            Log.d("Response", szResponse);
+            //InputStream in = connection.getInputStream();
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,5 +177,50 @@ public class RequestService extends AsyncTask<String, Void, String> {
             }
         }
         return szResponse;
+    }
+
+    public String  performPostCall(String requestURL, String uid, String gid, String lat, String lng) {
+
+        URL url;
+        String response = "";
+        try {
+            url = new URL(requestURL);
+
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(15000);
+            conn.setConnectTimeout(15000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+
+
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+            String szParam = String.format("uid=%s&gid=%s&lat=%s&long=%s", uid, gid, lat, lng);
+            Log.d("Params", szParam);
+            writer.write(szParam);
+
+            writer.flush();
+            writer.close();
+            os.close();
+            int responseCode=conn.getResponseCode();
+
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line=br.readLine()) != null) {
+                    response+=line;
+                }
+            }
+            else {
+                response="";
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.d("GPS sent gps->id", response);
+        return response;
     }
 }
